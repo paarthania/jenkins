@@ -1,0 +1,56 @@
+version: "3.6"
+
+services:
+  jenkins:
+    user: root
+    container_name: jenkins
+    image: jenkins/jenkins
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/Users/nbuyuknalbant/Projects/jenkins/jenkins-data/jenkins_home:/var/jenkins_home"
+    networks:
+      - net
+  remote_host:
+    container_name: remote-host
+    image: remote-host
+    build:
+      context: centos7
+    networks:
+      - net
+  db_host:
+    container_name: db
+    image: mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=1234"
+    volumes:
+      - "/Users/nbuyuknalbant/Projects/jenkins/jenkins-data/jenkins_home:/var/mysql"
+    networks:
+      - net
+  gitlab:
+    image: gitlab/gitlab-ee:latest
+    container_name: gitlab
+    restart: always
+    hostname: "gitlab.example.com"
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://gitlab.example.com'
+        postgresql['max_connections'] = 200
+        postgresql['shared_buffers'] = '256MB'
+        postgresql['statement_timeout'] = '60000'
+        redis['bind'] = '0.0.0.0'
+        redis['port'] = 6379
+    ports:
+      - "80:80"
+      - "443:443"
+      - "6379:6379" # Expose Redis port
+    volumes:
+      - "/Users/nbuyuknalbant/Projects/jenkins/jenkins-data/gitlab/config:/etc/gitlab"
+      - "/Users/nbuyuknalbant/Projects/jenkins/jenkins-data/gitlab/logs:/var/log/gitlab"
+      - "/Users/nbuyuknalbant/Projects/jenkins/jenkins-data/gitlab/data:/var/opt/gitlab"
+    shm_size: "1g"
+    networks:
+      - net
+
+networks:
+  net:
