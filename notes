@@ -1,0 +1,47 @@
+docker-compose.yml has definitions for the service itself
+docker-compose up
+docker-compose stop
+docker ps
+docker-compose restrat $nameOfTheContainer
+docker logs -f jenkins (here was the initial password for setup)
+docker exec -ti $nameOfTheContainer bash
+exit
+example:
+echo "Hello, $NAME! Current date and time is $(date)" > /tmp/info
+cat /tmp/info
+as we are using Docker to host the service all of the files that we create will be saved within the container.
+docker exec -ti remote_host bash
+mysql -u root -h db_host -p
+docker cp script.sh jenkins:/tmp/script.sh
+a parameter is just an interactive variable in jenkins
+https://www.perforce.com/manuals/jenkins/Content/P4Jenkins/variable-expansion.html#Built_in_environment_variables
+We dont need to provide these global env variables, they are key words and are collected from Jenkins directly. One can define their own global env.
+setup built-in jenkins cron to automate the task
+build-triggers
+change 0 to H
+https://crontab.guru/
+build from outside:
+http://localhost:8080/job/ENV/build?delay=0sec
+maven: apache maven -- is used to build java applications
+every single job has a workspace
+https://github.com/jenkins-docs/simple-java-maven-app
+(after building with git link you can see the directory by ->
+docker exec -ti jenkins bash
+cd maven-job/
+ls -l )
+first step of CI is to build a jar with the code in hand
+-B -DskipTests clean package (with maven) (package represents a jar)
+[INFO] Building jar: /var/jenkins_home/workspace/maven-job/target/my-app-1.0-SNAPSHOT.jar
+artifact: result of the build
+docker container prune
+In the context of Jenkins, DSL stands for Domain-Specific Language
+seed job-> normal job with dsl script
+what is CI/CD?
+https://www.infoworld.com/article/3271126/what-is-cicd-continuous-integration-and-continuous-delivery-explained.html
+CI-> starts after the trigger -> Unit, Integration, Functional Testing
+Cont. Delivery -> (your jar/artifact built successfully) deploy to testing env. and acceptance testing
+Cont. Deployment -> final step deploy/"promote" to production
+pipeline: entire workflow that is executed going through the CI/CD process
+https://www.jenkins.io/doc/book/pipeline/
+Jenkinsfile => Declarative Pipeline or Scripted Pipeline
+(build->test->deploy)
